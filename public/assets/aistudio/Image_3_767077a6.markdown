@@ -1,0 +1,227 @@
+---
+name: Orbital Observation System
+colors:
+  surface: '#0f131c'
+  surface-dim: '#0f131c'
+  surface-bright: '#353943'
+  surface-container-lowest: '#0a0e17'
+  surface-container-low: '#181b25'
+  surface-container: '#1c1f29'
+  surface-container-high: '#262a34'
+  surface-container-highest: '#31353f'
+  on-surface: '#dfe2ef'
+  on-surface-variant: '#e0c0b1'
+  inverse-surface: '#dfe2ef'
+  inverse-on-surface: '#2c303a'
+  outline: '#a78b7d'
+  outline-variant: '#584237'
+  surface-tint: '#ffb690'
+  primary: '#ffb690'
+  on-primary: '#552100'
+  primary-container: '#f97316'
+  on-primary-container: '#582200'
+  inverse-primary: '#9d4300'
+  secondary: '#4cd7f6'
+  on-secondary: '#003640'
+  secondary-container: '#03b5d3'
+  on-secondary-container: '#00424e'
+  tertiary: '#4edea3'
+  on-tertiary: '#003824'
+  tertiary-container: '#00b07a'
+  on-tertiary-container: '#003b26'
+  error: '#ffb4ab'
+  on-error: '#690005'
+  error-container: '#93000a'
+  on-error-container: '#ffdad6'
+  primary-fixed: '#ffdbca'
+  primary-fixed-dim: '#ffb690'
+  on-primary-fixed: '#341100'
+  on-primary-fixed-variant: '#783200'
+  secondary-fixed: '#acedff'
+  secondary-fixed-dim: '#4cd7f6'
+  on-secondary-fixed: '#001f26'
+  on-secondary-fixed-variant: '#004e5c'
+  tertiary-fixed: '#6ffbbe'
+  tertiary-fixed-dim: '#4edea3'
+  on-tertiary-fixed: '#002113'
+  on-tertiary-fixed-variant: '#005236'
+  background: '#0f131c'
+  on-background: '#dfe2ef'
+  surface-variant: '#31353f'
+  panel-elevated: '#111827'
+  panel-surface: '#0D131F'
+  border-subtle: '#1E293B'
+  border-active: '#334155'
+  thermal-critical: '#EF4444'
+  thermal-warning: '#F97316'
+  thermal-elevated: '#FBBF24'
+  thermal-nominal: '#10B981'
+  spectral-sensor: '#06B6D4'
+  text-primary: '#F8FAFC'
+  text-secondary: '#94A3B8'
+  text-muted: '#64748B'
+typography:
+  headline-xl:
+    fontFamily: Space Grotesk
+    fontSize: 32px
+    fontWeight: '600'
+    lineHeight: 40px
+    letterSpacing: -0.02em
+  headline-xl-mobile:
+    fontFamily: Space Grotesk
+    fontSize: 24px
+    fontWeight: '600'
+    lineHeight: 32px
+    letterSpacing: -0.01em
+  headline-lg:
+    fontFamily: Space Grotesk
+    fontSize: 22px
+    fontWeight: '600'
+    lineHeight: 28px
+    letterSpacing: -0.01em
+  headline-md:
+    fontFamily: Space Grotesk
+    fontSize: 18px
+    fontWeight: '500'
+    lineHeight: 24px
+  body-lg:
+    fontFamily: Geist
+    fontSize: 15px
+    fontWeight: '400'
+    lineHeight: 22px
+  body-md:
+    fontFamily: Geist
+    fontSize: 13px
+    fontWeight: '400'
+    lineHeight: 18px
+  body-sm:
+    fontFamily: Geist
+    fontSize: 12px
+    fontWeight: '400'
+    lineHeight: 16px
+  label-lg:
+    fontFamily: JetBrains Mono
+    fontSize: 13px
+    fontWeight: '500'
+    lineHeight: 16px
+    letterSpacing: 0.02em
+  label-md:
+    fontFamily: JetBrains Mono
+    fontSize: 11px
+    fontWeight: '500'
+    lineHeight: 14px
+    letterSpacing: 0.04em
+  label-sm:
+    fontFamily: JetBrains Mono
+    fontSize: 10px
+    fontWeight: '400'
+    lineHeight: 12px
+    letterSpacing: 0.06em
+  data-mono:
+    fontFamily: JetBrains Mono
+    fontSize: 12px
+    fontWeight: '600'
+    lineHeight: 16px
+    letterSpacing: -0.01em
+rounded:
+  sm: 0.125rem
+  DEFAULT: 0.25rem
+  md: 0.375rem
+  lg: 0.5rem
+  xl: 0.75rem
+  full: 9999px
+spacing:
+  gutter: 0.75rem
+  gutter-mobile: 0.5rem
+  margin: 1rem
+  margin-mobile: 0.75rem
+  space-xs: 0.25rem
+  space-sm: 0.5rem
+  space-md: 0.75rem
+  space-lg: 1rem
+  space-xl: 1.5rem
+---
+
+## Brand & Style
+
+The design system blends high-precision NASA Earth Science instrumentation with the crisp, keyboard-first, hyper-refined ergonomics of Linear. It serves geospatial analysts, remote sensing researchers, and disaster response coordinators monitoring planetary wildfire dynamics in real time. 
+
+The aesthetic is precision-technical minimalism merged with high-density data telemetry:
+- Deep optical black and obsidian void canvases simulate orbital reconnaissance environments.
+- High-contrast chromatic thermal telemetry isolates risk tiers against subdued structural frameworks.
+- Razor-sharp structural gridlines, microscopic indicator badges, and zero-latency visual feedback create an aura of mathematical authority and operational readiness.
+
+## Colors
+
+The chromatic architecture is engineered for low-fatigue operations in darkened command rooms while preserving dynamic visual ranges for multi-spectral fire detection.
+
+- **Primary (`#F97316`)**: Radiant kinetic thermal orange. Denotes active frontlines, active ignition complexes, and principal operational triggers.
+- **Secondary (`#06B6D4`)**: Cryogenic spectral cyan. Used for satellite pass vectors, radar overlays, instrumentation status, and geospatial boundary markers.
+- **Tertiary (`#10B981`)**: Quenched/contained emerald. Denotes controlled sectors, historical containment, and nominal background baselines.
+- **Neutral Base (`#090D16`)**: Deep obsidian deep-space canvas preventing glare and setting total optical contrast.
+- **Semantic Thermal Scale**: High-saturation spectral gradients transition strictly from `#10B981` (baseline) through `#FBBF24` (thermal anomaly) and `#F97316` (confirmed active burn) to `#EF4444` (extreme pyrocumulonimbus / severe radiative power).
+
+## Typography
+
+The typographic hierarchy implements three distinct typefaces serving explicit ergonomic functions:
+
+1. **Space Grotesk (Display & Section Headings)**: Technical, geometric, yet sculptured. Delivers modern aerospace authority across mission headings, modular pane titles, and analytical readouts.
+2. **Geist (Body & Analytical Narrative)**: Optimized for ultra-dense user interfaces, rendering tabular descriptions, tooltips, and status notes with neutral clarity.
+3. **JetBrains Mono (Telemetry, Coordinates & Metadata)**: Tabular lining figures, fixed-width character alignment, and zero ambiguity between glyphs (e.g., `0`, `O`, `1`, `l`). Deployed across latitude/longitude coordinates, radiative power (MW), scan timestamps, UTC clocks, and system tags.
+
+## Layout & Spacing
+
+The layout is built upon an edge-to-edge, density-optimized fluid grid tailored for widescreen GIS dashboards and telemetry walls:
+
+- **Desktop (1440px+)**: Multi-pane split architecture. Fixed collapsible left orbital navigation (64px collapsed, 240px expanded), fluid central multi-layer WebGL map canvas, and a fixed right analytical telemetry rail (360px). Gutters remain compressed at `0.75rem` (`12px`) to maximize data density.
+- **Tablet (768px - 1439px)**: Central map canvas prioritizes screen space. The analytical telemetry rail turns into a docked bottom drawer with swipeable height tiers.
+- **Mobile (< 768px)**: Single-column linear stack. Coordinates, time-slider scrubbing, and critical alerts pin to fixed floating overlays above the viewport.
+- **Grid & Alignment**: Strict 4px baseline sub-grid. Density takes priority over whitespace; padding is kept minimal to retain continuous data context without scrolling.
+
+## Elevation & Depth
+
+Visual hierarchy does not use soft diffuse drop shadows or blurred skeuomorphic blurs. Depth is produced strictly via **tonal layering and low-contrast perimeter borders**:
+
+- **Ground Level (Map & Base Canvas)**: `#090D16` (Deep obsidian black).
+- **Surface Level 1 (Tiling Panels & Drawers)**: `#0D131F` with a continuous `1px solid #1E293B` border.
+- **Surface Level 2 (Elevated Flyouts & Context Cards)**: `#111827` framed with `1px solid #334155`.
+- **Surface Level 3 (Modals, Overlays, Dropdowns)**: `#162032` with an ambient glow along borders (`box-shadow: 0 0 0 1px #334155, 0 8px 24px -4px rgba(0, 0, 0, 0.8)`).
+- **Data Accents & Highlights**: Active selections feature a sub-pixel luminous edge highlight using the secondary cyan or primary thermal orange with a `1px` inner stroke (`inset 0 0 0 1px rgba(249, 115, 22, 0.4)`).
+
+## Shapes
+
+The interface embraces an engineered, angular, instrument-grade silhouette:
+
+- Standard structural containers, data matrices, telemetry panels, and input fields use a tight `0.25rem` (`4px`) corner radius.
+- System notifications, floating map control pills, and status tags may use `rounded-lg` (`0.5rem` / `8px`) to distinguish interactive triggers from structural background grids.
+- Pill forms (`rounded-full`) are strictly forbidden except for live optical status pulses (e.g., green satellite beacon indicators).
+
+## Components
+
+### Buttons
+- **Primary Action (Execute/Download Layer)**: High-contrast vibrant orange background (`#F97316`), dark slate typography (`#090D16`, bold), `rounded-sm` (4px), height 32px, `label-md` uppercase typography. On hover, background shifts to `#FB923C`.
+- **Secondary (Inspect/Filter)**: Surface background (`#111827`), `1px solid #1E293B`, text `#F8FAFC`. On hover, border activates to `#334155` with text `#06B6D4`.
+- **Icon / Utility**: Transparent background, `1px solid transparent`, text `#94A3B8`. On hover, background `#111827`, border `#1E293B`, text `#F8FAFC`.
+
+### Chips & Thermal Status Tags
+- Monospaced metadata tags with an integrated 6px status bead.
+- **Thermal Critical**: Background `rgba(239, 68, 68, 0.12)`, border `1px solid rgba(239, 68, 68, 0.3)`, text `#EF4444`.
+- **Nominal Baseline**: Background `rgba(16, 185, 129, 0.1)`, border `1px solid rgba(16, 185, 129, 0.25)`, text `#10B981`.
+- Compact padding: `2px 6px`, font `label-sm`.
+
+### Input Fields & Search Bars
+- Compact height (32px), background `#0D131F`, border `1px solid #1E293B`, text `#F8FAFC`, placeholder `#64748B`.
+- Focus state: Border transitions instantly to `#06B6D4` with zero ambient ring blur; coordinates format automatically in `JetBrains Mono`.
+
+### Cards & Telemetry Modules
+- Base slate container (`#111827`), `1px solid #1E293B`.
+- Header bar: 36px fixed height, border-bottom `1px solid #1E293B`, uppercase `label-md` tracking at `0.04em`.
+- Data grid contents use strict zero-gap borders separating cell units for high density.
+
+### Checkboxes & Segmented Radio Toggles
+- **Checkboxes**: 14px x 14px squares, border `1px solid #334155`, background `#090D16`. Checked state fills with `#F97316` displaying an obsidian crisp check icon.
+- **Segmented Radio Bars**: Monolithic slate track (`#0D131F`), active segment elevated to `#1E293B` with high-contrast text (`#F8FAFC`).
+
+### Specialized Geospatial Components
+- **Timeline Scrubber / Calendar Slider**: Monospaced temporal tick marks (UTC), scrub head rendered in `#06B6D4` with vertical micro-hairline, thermal histogram bars stacked below each day/hour.
+- **Coordinate Matrix Readout**: Fixed-width docked footer component continuously rendering viewport bounding boxes `[LAT, LON, ALT, FOV]` in `JetBrains Mono`.

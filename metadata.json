@@ -1,0 +1,6 @@
+{
+  "name": "Orbital Observation System",
+  "description": "NASA-grade orbital Earth science telemetry dashboard for real-time planetary wildfire dynamics, thermal anomaly analysis, and multi-spectral satellite reconnaissance.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

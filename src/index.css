@@ -1,0 +1,143 @@
+@import "tailwindcss";
+
+@theme {
+  --font-display: 'Space Grotesk', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-sans: 'Geist', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+
+  --color-space-black: #090D16;
+  --color-panel-bg: #111827;
+  --color-panel-surface: #0D131F;
+  --color-panel-elevated: #162032;
+  --color-border-subtle: #1E293B;
+  --color-border-active: #334155;
+  --color-thermal-orange: #F97316;
+  --color-spectral-cyan: #06B6D4;
+  --color-thermal-nominal: #10B981;
+  --color-thermal-critical: #EF4444;
+  --color-thermal-elevated: #FBBF24;
+}
+
+body {
+  font-family: 'Geist', -apple-system, BlinkMacSystemFont, sans-serif;
+  background-color: #090D16;
+  color: #dfe2ef;
+}
+
+/* Custom scrollbars for dense telemetry feeds */
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+::-webkit-scrollbar-track {
+  background: #090D16;
+}
+::-webkit-scrollbar-thumb {
+  background: #1E293B;
+  border-radius: 2px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #334155;
+}
+
+/* Leaflet dark styling */
+.leaflet-container {
+  background: #090D16 !important;
+  font-family: 'Geist', sans-serif !important;
+}
+
+.leaflet-bar {
+  border: 1px solid #1E293B !important;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.5) !important;
+  border-radius: 4px !important;
+  overflow: hidden;
+}
+
+.leaflet-bar a {
+  background-color: #111827 !important;
+  color: #94A3B8 !important;
+  border-bottom: 1px solid #1E293B !important;
+}
+
+.leaflet-bar a:hover {
+  background-color: #1C2436 !important;
+  color: #06B6D4 !important;
+}
+
+.leaflet-control-attribution {
+  background: rgba(13, 19, 31, 0.85) !important;
+  color: #64748B !important;
+  font-family: 'JetBrains Mono', monospace !important;
+  font-size: 9px !important;
+  border: 1px solid #1E293B !important;
+  border-radius: 2px !important;
+  backdrop-filter: blur(4px);
+}
+
+.leaflet-control-attribution a {
+  color: #94A3B8 !important;
+}
+
+.leaflet-popup-content-wrapper {
+  background: #111827 !important;
+  color: #DFE2EF !important;
+  border: 1px solid #334155 !important;
+  border-radius: 4px !important;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(6, 182, 212, 0.2) !important;
+  padding: 0 !important;
+}
+
+.leaflet-popup-tip {
+  background: #111827 !important;
+  border: 1px solid #334155 !important;
+}
+
+.leaflet-popup-content {
+  margin: 0 !important;
+  line-height: 1.4 !important;
+}
+
+.leaflet-popup-close-button {
+  color: #94A3B8 !important;
+  padding: 6px !important;
+}
+
+.leaflet-popup-close-button:hover {
+  color: #F8FAFC !important;
+}
+
+/* Radar & Thermal Pulse Animations */
+@keyframes thermal-ping {
+  0% {
+    transform: scale(0.9);
+    opacity: 0.9;
+  }
+  70% {
+    transform: scale(2.2);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(2.4);
+    opacity: 0;
+  }
+}
+
+.animate-thermal-pulse {
+  animation: thermal-ping 2.2s cubic-bezier(0, 0, 0.2, 1) infinite;
+}
+
+@keyframes scanline {
+  0% { transform: translateY(-100%); }
+  100% { transform: translateY(1000%); }
+}
+
+.scanline-effect {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, rgba(6, 182, 212, 0.4), transparent);
+  pointer-events: none;
+  animation: scanline 8s linear infinite;
+}
