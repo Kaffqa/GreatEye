@@ -622,24 +622,26 @@ export const MapCanvas: React.FC<MapCanvasProps> = React.memo(({
         </>
       )}
 
-      {/* UNIFIED MAP CONTROL DOCK & POPOVERS */}
-      <div className="absolute bottom-4 left-4 z-20 flex flex-col gap-2 max-w-[calc(100vw-2rem)] pointer-events-auto">
+      {/* UNIFIED MAP BOTTOM CONTROL BAR & POPOVERS */}
+      <div className="absolute bottom-3 left-3 right-3 z-20 flex flex-col gap-2 pointer-events-none">
         {/* Heatmap Settings Popover */}
         {isHeatmapSettingsOpen && (
-          <HeatmapToolbar
-            isOpen={isHeatmapSettingsOpen}
-            onClose={() => setIsHeatmapSettingsOpen(false)}
-            config={heatmapConfig}
-            onChangeConfig={setHeatmapConfig}
-            onQuickJump={setInternalFlyTo}
-          />
+          <div className="pointer-events-auto self-start max-w-full">
+            <HeatmapToolbar
+              isOpen={isHeatmapSettingsOpen}
+              onClose={() => setIsHeatmapSettingsOpen(false)}
+              config={heatmapConfig}
+              onChangeConfig={setHeatmapConfig}
+              onQuickJump={setInternalFlyTo}
+            />
+          </div>
         )}
 
         {/* Legend Popover */}
         {isLegendOpen && (
           <div
             onClick={(e) => e.stopPropagation()}
-            className={`p-3.5 rounded-2xl border shadow-2xl w-76 max-w-[calc(100vw-2rem)] font-mono text-xs space-y-2.5 pointer-events-auto animate-fadeIn ${
+            className={`pointer-events-auto self-start p-3.5 rounded-2xl border shadow-2xl w-76 max-w-[calc(100vw-2rem)] font-mono text-xs space-y-2.5 animate-fadeIn ${
               theme === 'light'
                 ? 'bg-white/98 border-slate-200 text-slate-800 shadow-slate-300/50'
                 : 'bg-[#070c18]/98 border-slate-800 text-slate-100 shadow-cyan-950/80'
@@ -744,157 +746,160 @@ export const MapCanvas: React.FC<MapCanvasProps> = React.memo(({
           </div>
         )}
 
-        {/* Unified Control Dock Bar */}
-        <div
-          className={`flex flex-wrap items-center gap-1.5 p-1 rounded-2xl border shadow-2xl text-[10px] font-mono transition-colors ${
-            theme === 'light'
-              ? 'bg-white/98 border-slate-200 shadow-slate-300/60'
-              : 'bg-[#070c18]/98 border-slate-800/90 shadow-2xl'
-          }`}
-        >
-          {/* Segment A: Mode Switcher */}
+        {/* Horizontal Control Dock Row + Real-Time Coordinate Badge */}
+        <div className="flex items-center justify-between gap-3 w-full">
+          {/* Main Control Dock */}
           <div
-            className={`flex items-center gap-0.5 p-0.5 rounded-xl border ${
-              theme === 'light' ? 'bg-slate-100 border-slate-200' : 'bg-slate-900/90 border-slate-800'
+            className={`pointer-events-auto flex items-center gap-1 sm:gap-1.5 p-1 rounded-2xl border shadow-xl text-[10px] font-mono transition-colors overflow-x-auto no-scrollbar max-w-full whitespace-nowrap shrink ${
+              theme === 'light'
+                ? 'bg-white/98 border-slate-200 shadow-slate-300/60'
+                : 'bg-[#070c18]/98 border-slate-800/90 shadow-2xl'
             }`}
           >
-            <button
-              onClick={() => {
-                setMapMode('clusters');
-                setIsHeatmapSettingsOpen(false);
-              }}
-              className={`px-2 py-1 rounded-lg transition-all cursor-pointer flex items-center gap-1 ${
-                mapMode === 'clusters'
-                  ? 'bg-cyan-500 text-black font-bold shadow-sm'
-                  : theme === 'light'
-                  ? 'text-slate-600 hover:text-slate-900'
-                  : 'text-slate-400 hover:text-slate-200'
+            {/* Segment A: Mode Switcher */}
+            <div
+              className={`flex items-center gap-0.5 p-0.5 rounded-xl border ${
+                theme === 'light' ? 'bg-slate-100 border-slate-200' : 'bg-slate-900/90 border-slate-800'
               }`}
-              title={language === 'en' ? 'DBSCAN Spatial Cluster Points' : 'Peta Titik Klaster Spasial DBSCAN'}
             >
-              <Crosshair className="w-3 h-3" />
-              <span>{t.dockCluster}</span>
-            </button>
-            <button
-              onClick={() => setMapMode('heatmap')}
-              className={`px-2 py-1 rounded-lg transition-all cursor-pointer flex items-center gap-1 ${
-                mapMode === 'heatmap'
-                  ? 'bg-gradient-to-r from-rose-500 to-amber-500 text-black font-bold shadow-sm'
-                  : theme === 'light'
-                  ? 'text-slate-600 hover:text-slate-900'
-                  : 'text-slate-400 hover:text-slate-200'
-              }`}
-              title={language === 'en' ? 'Thermal Density Heatmap' : 'Peta Densitas Termal Heatmap'}
-            >
-              <Flame className="w-3 h-3" />
-              <span>{t.dockHeatmap}</span>
-            </button>
-            <button
-              onClick={() => setMapMode('split')}
-              className={`px-2 py-1 rounded-lg transition-all cursor-pointer flex items-center gap-1 ${
-                mapMode === 'split'
-                  ? 'bg-gradient-to-r from-cyan-400 to-emerald-400 text-black font-bold shadow-sm'
-                  : theme === 'light'
-                  ? 'text-slate-600 hover:text-slate-900'
-                  : 'text-slate-400 hover:text-slate-200'
-              }`}
-              title={language === 'en' ? 'Hybrid Map (Heatmap + Clusters)' : 'Peta Hybrid (Heatmap + Klaster)'}
-            >
-              <Sparkles className="w-3 h-3" />
-              <span>Hybrid</span>
-            </button>
-          </div>
+              <button
+                onClick={() => {
+                  setMapMode('clusters');
+                  setIsHeatmapSettingsOpen(false);
+                }}
+                className={`px-2 py-1 rounded-lg transition-all cursor-pointer flex items-center gap-1 shrink-0 ${
+                  mapMode === 'clusters'
+                    ? 'bg-cyan-500 text-black font-bold shadow-sm'
+                    : theme === 'light'
+                    ? 'text-slate-600 hover:text-slate-900'
+                    : 'text-slate-400 hover:text-slate-200'
+                }`}
+                title={language === 'en' ? 'DBSCAN Spatial Cluster Points' : 'Peta Titik Klaster Spasial DBSCAN'}
+              >
+                <Crosshair className="w-3 h-3" />
+                <span>{t.dockCluster}</span>
+              </button>
+              <button
+                onClick={() => setMapMode('heatmap')}
+                className={`px-2 py-1 rounded-lg transition-all cursor-pointer flex items-center gap-1 shrink-0 ${
+                  mapMode === 'heatmap'
+                    ? 'bg-gradient-to-r from-rose-500 to-amber-500 text-black font-bold shadow-sm'
+                    : theme === 'light'
+                    ? 'text-slate-600 hover:text-slate-900'
+                    : 'text-slate-400 hover:text-slate-200'
+                }`}
+                title={language === 'en' ? 'Thermal Density Heatmap' : 'Peta Densitas Termal Heatmap'}
+              >
+                <Flame className="w-3 h-3" />
+                <span>{t.dockHeatmap}</span>
+              </button>
+              <button
+                onClick={() => setMapMode('split')}
+                className={`px-2 py-1 rounded-lg transition-all cursor-pointer flex items-center gap-1 shrink-0 ${
+                  mapMode === 'split'
+                    ? 'bg-gradient-to-r from-cyan-400 to-emerald-400 text-black font-bold shadow-sm'
+                    : theme === 'light'
+                    ? 'text-slate-600 hover:text-slate-900'
+                    : 'text-slate-400 hover:text-slate-200'
+                }`}
+                title={language === 'en' ? 'Hybrid Map (Heatmap + Clusters)' : 'Peta Hybrid (Heatmap + Klaster)'}
+              >
+                <Sparkles className="w-3 h-3" />
+                <span>Hybrid</span>
+              </button>
+            </div>
 
-          <div
-            className={`w-[1px] h-4 shrink-0 ${theme === 'light' ? 'bg-slate-300' : 'bg-slate-800'}`}
-          />
+            <div
+              className={`w-[1px] h-4 shrink-0 ${theme === 'light' ? 'bg-slate-300' : 'bg-slate-800'}`}
+            />
 
-          {/* Segment B: Heatmap Settings Button */}
-          {(mapMode === 'heatmap' || mapMode === 'split') && (
+            {/* Segment B: Heatmap Settings Button */}
+            {(mapMode === 'heatmap' || mapMode === 'split') && (
+              <button
+                onClick={toggleHeatmapSettings}
+                className={`px-2 sm:px-2.5 py-1 rounded-xl transition-all cursor-pointer flex items-center gap-1 sm:gap-1.5 shrink-0 ${
+                  isHeatmapSettingsOpen
+                    ? 'bg-rose-950/80 border border-rose-500/80 text-rose-300 font-bold'
+                    : theme === 'light'
+                    ? 'bg-slate-100 border-slate-200 text-slate-700 hover:border-slate-300'
+                    : 'bg-slate-900/60 border border-slate-800 text-slate-300 hover:text-white hover:border-slate-700'
+                }`}
+                title={language === 'en' ? 'Tune heatmap parameters & epicenters' : 'Atur parameter & episentrum heatmap'}
+              >
+                <Sliders className="w-3 h-3 text-rose-400" />
+                <span>{language === 'en' ? 'Tune' : 'Atur'}</span>
+                <span className="w-1.5 h-1.5 rounded-full bg-rose-500 animate-pulse" />
+              </button>
+            )}
+
+            {/* Segment C: Basemap Switcher */}
             <button
-              onClick={toggleHeatmapSettings}
-              className={`px-2.5 py-1 rounded-xl transition-all cursor-pointer flex items-center gap-1.5 ${
-                isHeatmapSettingsOpen
-                  ? 'bg-rose-950/80 border border-rose-500/80 text-rose-300 font-bold'
+              onClick={() => setBasemapStyle((prev) => (prev === 'dark-gray' ? 'satellite' : 'dark-gray'))}
+              className={`px-2 sm:px-2.5 py-1 rounded-xl border transition-all cursor-pointer flex items-center gap-1 sm:gap-1.5 shrink-0 ${
+                theme === 'light'
+                  ? 'bg-slate-100 border-slate-200 text-slate-700 hover:border-slate-300'
+                  : 'bg-slate-900/60 border border-slate-800 text-slate-300 hover:text-white hover:border-slate-700'
+              }`}
+              title={language === 'en' ? 'Toggle basemap style' : 'Ganti gaya peta'}
+            >
+              {basemapStyle === 'dark-gray' ? (
+                <>
+                  <Eye className="w-3 h-3 text-cyan-500" />
+                  <span>{theme === 'light' ? t.dockVectorLight : t.dockVectorDark}</span>
+                </>
+              ) : (
+                <>
+                  <Satellite className="w-3 h-3 text-amber-500" />
+                  <span>{t.dockSatellite}</span>
+                </>
+              )}
+            </button>
+
+            {/* Segment D: Performance Switcher */}
+            <button
+              onClick={() => setRenderMode((prev) => (prev === 'ultra-smooth' ? 'all' : 'ultra-smooth'))}
+              className={`px-2 py-1 rounded-xl border transition-all cursor-pointer flex items-center gap-1 shrink-0 ${
+                renderMode === 'ultra-smooth'
+                  ? 'text-emerald-500 hover:border-emerald-500/50'
+                  : theme === 'light'
+                  ? 'text-slate-600 hover:border-slate-300'
+                  : 'text-slate-400 hover:border-slate-700'
+              } ${theme === 'light' ? 'bg-slate-100 border-slate-200' : 'bg-slate-900/60 border-slate-800'}`}
+              title="Mode Kecepatan Rendering Peta"
+            >
+              <Gauge className="w-3 h-3" />
+              <span>{renderMode === 'ultra-smooth' ? t.dockFpsSmooth : (language === 'en' ? 'All' : 'Semua')}</span>
+            </button>
+
+            {/* Segment E: Legenda Toggle */}
+            <button
+              onClick={toggleLegend}
+              className={`px-2 sm:px-2.5 py-1 rounded-xl transition-all cursor-pointer flex items-center gap-1 sm:gap-1.5 shrink-0 ${
+                isLegendOpen
+                  ? 'bg-cyan-950/80 border border-cyan-500/80 text-cyan-300 font-bold'
                   : theme === 'light'
                   ? 'bg-slate-100 border-slate-200 text-slate-700 hover:border-slate-300'
                   : 'bg-slate-900/60 border border-slate-800 text-slate-300 hover:text-white hover:border-slate-700'
               }`}
-              title={language === 'en' ? 'Tune heatmap parameters & epicenters' : 'Atur parameter & episentrum heatmap'}
+              title="Buka / Tutup Legenda Simbol & Suhu"
             >
-              <Sliders className="w-3 h-3 text-rose-400" />
-              <span>{language === 'en' ? 'Tune Heatmap' : 'Atur Heatmap'}</span>
-              <span className="w-1.5 h-1.5 rounded-full bg-rose-500 animate-pulse" />
+              <Sparkles className="w-3 h-3 text-cyan-500" />
+              <span>{t.dockLegend}</span>
             </button>
-          )}
+          </div>
 
-          {/* Segment C: Basemap Switcher */}
-          <button
-            onClick={() => setBasemapStyle((prev) => (prev === 'dark-gray' ? 'satellite' : 'dark-gray'))}
-            className={`px-2.5 py-1 rounded-xl border transition-all cursor-pointer flex items-center gap-1.5 ${
+          {/* Floating High-Performance Real-Time Coordinate Badge (Zero Re-render, Hidden on Mobile/Tablet) */}
+          <div
+            ref={coordBadgeRef}
+            className={`hidden xl:flex items-center px-2.5 py-1 rounded-xl border font-mono text-[10px] pointer-events-none select-none tracking-wide shadow-lg shrink-0 transition-colors ${
               theme === 'light'
-                ? 'bg-slate-100 border-slate-200 text-slate-700 hover:border-slate-300'
-                : 'bg-slate-900/60 border border-slate-800 text-slate-300 hover:text-white hover:border-slate-700'
+                ? 'bg-white/98 border-slate-300 text-slate-700 shadow-slate-300/40'
+                : 'bg-[#070c18]/98 border-slate-800 text-cyan-400 shadow-cyan-950/40'
             }`}
-            title={language === 'en' ? 'Toggle basemap style' : 'Ganti gaya peta'}
           >
-            {basemapStyle === 'dark-gray' ? (
-              <>
-                <Eye className="w-3 h-3 text-cyan-500" />
-                <span>{theme === 'light' ? t.dockVectorLight : t.dockVectorDark}</span>
-              </>
-            ) : (
-              <>
-                <Satellite className="w-3 h-3 text-amber-500" />
-                <span>{t.dockSatellite}</span>
-              </>
-            )}
-          </button>
-
-          {/* Segment D: Performance Switcher */}
-          <button
-            onClick={() => setRenderMode((prev) => (prev === 'ultra-smooth' ? 'all' : 'ultra-smooth'))}
-            className={`px-2 py-1 rounded-xl border transition-all cursor-pointer flex items-center gap-1 ${
-              renderMode === 'ultra-smooth'
-                ? 'text-emerald-500 hover:border-emerald-500/50'
-                : theme === 'light'
-                ? 'text-slate-600 hover:border-slate-300'
-                : 'text-slate-400 hover:border-slate-700'
-            } ${theme === 'light' ? 'bg-slate-100 border-slate-200' : 'bg-slate-900/60 border-slate-800'}`}
-            title="Mode Kecepatan Rendering Peta"
-          >
-            <Gauge className="w-3 h-3" />
-            <span>{renderMode === 'ultra-smooth' ? t.dockFpsSmooth : (language === 'en' ? 'All' : 'Semua')}</span>
-          </button>
-
-          {/* Segment E: Legenda Toggle */}
-          <button
-            onClick={toggleLegend}
-            className={`px-2.5 py-1 rounded-xl transition-all cursor-pointer flex items-center gap-1.5 ${
-              isLegendOpen
-                ? 'bg-cyan-950/80 border border-cyan-500/80 text-cyan-300 font-bold'
-                : theme === 'light'
-                ? 'bg-slate-100 border-slate-200 text-slate-700 hover:border-slate-300'
-                : 'bg-slate-900/60 border border-slate-800 text-slate-300 hover:text-white hover:border-slate-700'
-            }`}
-            title="Buka / Tutup Legenda Simbol & Suhu"
-          >
-            <Sparkles className="w-3 h-3 text-cyan-500" />
-            <span>{t.dockLegend}</span>
-          </button>
+            LAT: -0.7893° | LON: 113.9213°
+          </div>
         </div>
-      </div>
-
-      {/* Floating High-Performance Real-Time Coordinate Badge (Zero Re-render, Hidden on Mobile Touch) */}
-      <div
-        ref={coordBadgeRef}
-        className={`hidden sm:block absolute bottom-4 right-4 z-20 px-3 py-1 rounded-xl border font-mono text-[10px] pointer-events-none select-none tracking-wide shadow-lg transition-colors ${
-          theme === 'light'
-            ? 'bg-white/98 border-slate-300 text-slate-700 shadow-slate-300/40'
-            : 'bg-[#070c18]/98 border-slate-800 text-cyan-400 shadow-cyan-950/40'
-        }`}
-      >
-        LAT: -0.7893° | LON: 113.9213°
       </div>
     </div>
   );
