@@ -157,8 +157,8 @@ Proyek ini telah melalui proses audit dan optimasi performa berstandar produksi:
 
 ### 1. Clone Repositori
 ```bash
-git clone https://github.com/username/greateye-earth-observation.git
-cd greateye-earth-observation
+git clone https://github.com/Kaffqa/GreatEye.git
+cd GreatEye
 ```
 
 ### 2. Instalasi Dependensi
