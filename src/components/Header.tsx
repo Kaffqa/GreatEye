@@ -1,224 +1,269 @@
 import React, { useEffect, useState } from 'react';
 import {
-  Satellite,
-  Radio,
   Flame,
   Download,
-  Eye,
   RotateCcw,
   Clock,
-  ShieldAlert,
-  SlidersHorizontal,
+  LayoutDashboard,
+  Compass,
+  FileSpreadsheet,
+  Globe,
   PanelRight,
+  PanelLeft,
+  HelpCircle,
+  Settings,
 } from 'lucide-react';
-import { Hotspot, SatelliteTrack } from '../types';
-import { exportToGeoJson } from '../utils/geo';
+import { ViewMode, SpatiotemporalFilter, ClusterPoint } from '../types';
+import { downloadFilteredCsv } from '../utils/analytics';
+import { usePreferences } from '../context/PreferencesContext';
+import { useTranslation } from '../utils/i18n';
 
 interface HeaderProps {
-  hotspots: Hotspot[];
-  satellites: SatelliteTrack[];
-  onOpenSpectralModal: () => void;
+  viewMode: ViewMode;
+  onSetViewMode: (mode: ViewMode) => void;
+  filter: SpatiotemporalFilter;
+  filteredClusters: ClusterPoint[];
   onResetView: () => void;
   isSidebarOpen: boolean;
   onToggleSidebar: () => void;
-  isTelemetryOpen: boolean;
-  onToggleTelemetry: () => void;
-  selectedHotspot: Hotspot | null;
+  isAnalyticsOpen: boolean;
+  onToggleAnalytics: () => void;
+  onOpenHowItWorks: () => void;
 }
 
-export const Header: React.FC<HeaderProps> = ({
-  hotspots,
-  satellites,
-  onOpenSpectralModal,
+export const Header: React.FC<HeaderProps> = React.memo(({
+  viewMode,
+  onSetViewMode,
+  filter,
+  filteredClusters,
   onResetView,
   isSidebarOpen,
   onToggleSidebar,
-  isTelemetryOpen,
-  onToggleTelemetry,
+  isAnalyticsOpen,
+  onToggleAnalytics,
+  onOpenHowItWorks,
 }) => {
-  const [utcTime, setUtcTime] = useState<string>('');
-  const [copiedNotification, setCopiedNotification] = useState<boolean>(false);
+  const { theme, language, openSettings } = usePreferences();
+  const t = useTranslation(language);
+  const [wibTime, setWibTime] = useState<string>('');
 
   useEffect(() => {
     const updateTime = () => {
       const now = new Date();
-      setUtcTime(
-        now.toISOString().replace('T', ' ').substring(0, 19) + ' UTC'
-      );
+      const options: Intl.DateTimeFormatOptions = {
+        timeZone: 'Asia/Jakarta',
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+        hour12: false,
+      };
+      setWibTime(now.toLocaleString(language === 'id' ? 'id-ID' : 'en-US', options) + ' WIB');
     };
     updateTime();
     const interval = setInterval(updateTime, 1000);
     return () => clearInterval(interval);
-  }, []);
+  }, [language]);
 
-  const totalFrp = hotspots.reduce((acc, h) => acc + h.frp, 0);
-  const criticalCount = hotspots.filter((h) => h.severity === 'critical').length;
-  const warningCount = hotspots.filter((h) => h.severity === 'warning').length;
-
-  const handleExport = () => {
-    const jsonStr = exportToGeoJson(hotspots);
-    const blob = new Blob([jsonStr], { type: 'application/json' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `orbital-wildfire-telemetry-${new Date().toISOString().substring(0, 10)}.geojson`;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
-
-    setCopiedNotification(true);
-    setTimeout(() => setCopiedNotification(false), 2500);
+  const handleExportCsv = () => {
+    const filename = `greateye-clusters-${filter.selectedYear}-${
+      filter.selectedProvince !== 'all'
+        ? filter.selectedProvince.toLowerCase().replace(/\s+/g, '_')
+        : filter.selectedIsland !== 'all'
+        ? filter.selectedIsland.toLowerCase()
+        : 'indonesia'
+    }.csv`;
+    downloadFilteredCsv(filteredClusters, filename);
   };
 
   return (
-    <header className="w-full max-w-full h-14 bg-[#0D131F] border-b border-[#1E293B] px-3 flex items-center justify-between select-none z-30 shrink-0 overflow-hidden">
-      {/* Left: Branding & Mission Identity */}
-      <div className="flex items-center space-x-2.5 shrink-0">
-        <button
-          onClick={onToggleSidebar}
-          className="p-1.5 rounded-sm hover:bg-[#1E293B] text-[#94A3B8] hover:text-[#06B6D4] transition-colors border border-transparent hover:border-[#334155] cursor-pointer"
-          title={isSidebarOpen ? 'Collapse Left Navigation' : 'Expand Left Navigation'}
-          aria-label="Toggle navigation panel"
-        >
-          <SlidersHorizontal className="w-4 h-4" />
-        </button>
+    <header
+      className={`h-14 border-b px-2 sm:px-4 flex items-center justify-between select-none shrink-0 z-30 transition-colors w-full max-w-full overflow-hidden ${
+        theme === 'light'
+          ? 'bg-white border-slate-200 text-slate-800'
+          : 'bg-[#060a13] border-slate-800/90 text-slate-100'
+      }`}
+    >
+      {/* Left: Brand & View Navigation */}
+      <div className="flex items-center gap-2 sm:gap-3 shrink-0">
+        {viewMode === 'dashboard' && (
+          <button
+            onClick={onToggleSidebar}
+            className={`hidden md:block p-1.5 rounded-lg border transition-colors cursor-pointer ${
+              theme === 'light'
+                ? 'bg-slate-100 border-slate-200 text-slate-600 hover:text-cyan-600 hover:border-cyan-400'
+                : 'bg-slate-900 border-slate-800 text-slate-400 hover:text-cyan-400 hover:border-cyan-400/50'
+            }`}
+            title={t.navToggleFilter}
+          >
+            <PanelLeft className="w-4 h-4" />
+          </button>
+        )}
 
-        <div className="flex items-center space-x-2.5 whitespace-nowrap">
-          <div className="w-8 h-8 rounded-sm bg-[#111827] border border-[#334155] flex items-center justify-center relative overflow-hidden shadow-inner shrink-0">
-            <Satellite className="w-4 h-4 text-[#F97316]" />
-            <div className="absolute top-0 right-0 w-1.5 h-1.5 bg-[#10B981] rounded-full animate-ping" />
-            <div className="absolute top-0 right-0 w-1.5 h-1.5 bg-[#10B981] rounded-full" />
+        <div className="flex items-center gap-2 cursor-pointer" onClick={() => onSetViewMode('landing')}>
+          <div className="flex items-center justify-center w-8 h-8 rounded-lg bg-gradient-to-br from-cyan-500 to-blue-700 shadow-md shadow-cyan-500/20 shrink-0">
+            <Flame className="w-4 h-4 text-black fill-current" />
           </div>
-
           <div>
-            <div className="flex items-center space-x-1.5">
-              <span className="font-['Space_Grotesk'] font-semibold text-xs sm:text-sm tracking-wide text-[#F8FAFC]">
-                ORBITAL OBSERVATION SYSTEM
-              </span>
-              <span className="text-[10px] font-['JetBrains_Mono'] px-1.5 py-0.5 rounded-sm bg-[#162032] border border-[#334155] text-[#06B6D4] hidden sm:inline">
-                LEO-VIIRS
-              </span>
+            <div className="text-sm font-black tracking-wider bg-gradient-to-r from-cyan-400 via-blue-400 to-indigo-400 bg-clip-text text-transparent">
+              GREATEYE
             </div>
-            <div className="text-[10px] font-['Geist'] text-[#94A3B8] flex items-center space-x-1.5">
-              <span className="hidden md:inline">NASA / NOAA / COPERNICUS</span>
-              <span className="text-[#334155] hidden md:inline">•</span>
-              <span className="text-[#10B981] flex items-center space-x-1">
-                <span className="w-1.5 h-1.5 rounded-full bg-[#10B981] inline-block"></span>
-                <span>REALTIME FEED</span>
-              </span>
+            <div
+              className={`hidden sm:block text-[9px] font-mono tracking-wider uppercase leading-none ${
+                theme === 'light' ? 'text-cyan-700' : 'text-cyan-400/80'
+              }`}
+            >
+              Mission Control
             </div>
           </div>
         </div>
-      </div>
 
-      {/* Middle: Live Mission Telemetry Readouts (responsively scaled) */}
-      <div className="hidden lg:flex items-center space-x-2 shrink-0 mx-2">
-        {/* UTC Clock */}
-        <div className="flex items-center space-x-1.5 px-2 py-1 rounded-sm bg-[#090D16] border border-[#1E293B] text-[11px] font-['JetBrains_Mono'] text-[#94A3B8] whitespace-nowrap shrink-0">
-          <Clock className="w-3.5 h-3.5 text-[#06B6D4] shrink-0" />
-          <span className="text-[#F8FAFC] tracking-wider">{utcTime || 'SYNCHRONIZING...'}</span>
-        </div>
-
-        {/* Anomaly Metrics */}
-        <div className="flex items-center space-x-2 px-2.5 py-1 rounded-sm bg-[#090D16] border border-[#1E293B] shrink-0 whitespace-nowrap">
-          <div className="flex items-center space-x-1.5">
-            <Flame className="w-3.5 h-3.5 text-[#F97316] shrink-0" />
-            <span className="text-[11px] font-['Geist'] text-[#94A3B8] hidden xl:inline">HOTSPOTS:</span>
-            <span className="text-[12px] font-['JetBrains_Mono'] font-bold text-[#F8FAFC]">
-              {hotspots.length}
-            </span>
-          </div>
-
-          <div className="h-3 w-[1px] bg-[#1E293B]" />
-
-          <div className="flex items-center space-x-1.5">
-            <span className="text-[11px] font-['Geist'] text-[#94A3B8] hidden xl:inline">CUMULATIVE FRP:</span>
-            <span className="text-[12px] font-['JetBrains_Mono'] font-bold text-[#F97316]">
-              {totalFrp.toLocaleString()} MW
-            </span>
-          </div>
-
-          <div className="h-3 w-[1px] bg-[#1E293B] hidden xl:block" />
-
-          <div className="hidden xl:flex items-center space-x-1 text-[11px] font-['JetBrains_Mono']">
-            <span className="px-1 py-0.5 rounded-sm bg-red-950/40 border border-red-800/50 text-[#EF4444]">
-              {criticalCount} CRIT
-            </span>
-            <span className="px-1 py-0.5 rounded-sm bg-orange-950/40 border border-orange-800/50 text-[#F97316]">
-              {warningCount} WARN
-            </span>
-          </div>
-        </div>
-
-        {/* Constellation Telemetry - Unified badge with fixed width that never clips */}
-        <div className="hidden 2xl:flex items-center space-x-2 px-2.5 py-1 rounded-sm bg-[#090D16] border border-[#1E293B] text-[11px] font-['JetBrains_Mono'] shrink-0 whitespace-nowrap">
-          <div className="flex items-center space-x-1.5">
-            <Radio className="w-3.5 h-3.5 text-[#06B6D4] animate-pulse shrink-0" />
-            <span className="text-[#94A3B8]">CONSTELLATION:</span>
-            <span className="text-[#10B981] font-bold">{satellites.length} NODES</span>
-          </div>
-          <div className="h-3 w-[1px] bg-[#1E293B]" />
-          <div className="flex items-center space-x-1">
-            <span className="text-[#dfe2ef] font-semibold">{satellites[0]?.code}</span>
-            <span className="text-[9px] px-1 py-0.2 bg-[#111827] text-[#06B6D4] border border-[#1E293B] rounded-sm">
-              PASS {satellites[0]?.nextPassUtc}
-            </span>
-          </div>
-        </div>
-      </div>
-
-      {/* Right: Operational Controls (ALWAYS preserved & shrink-0) */}
-      <div className="flex items-center space-x-1.5 shrink-0 ml-auto">
-        <button
-          onClick={onOpenSpectralModal}
-          className="h-8 px-2 sm:px-2.5 rounded-sm bg-[#111827] hover:bg-[#162032] border border-[#1E293B] hover:border-[#334155] text-[#94A3B8] hover:text-[#06B6D4] text-xs font-['JetBrains_Mono'] flex items-center space-x-1.5 transition-all cursor-pointer whitespace-nowrap"
-          title="Inspect SWIR / NIR Radiance Imagery"
-        >
-          <Eye className="w-3.5 h-3.5 text-[#06B6D4] shrink-0" />
-          <span className="hidden sm:inline">SWIR BANDS</span>
-        </button>
-
-        <button
-          onClick={onResetView}
-          className="h-8 px-2 rounded-sm bg-[#111827] hover:bg-[#162032] border border-[#1E293B] hover:border-[#334155] text-[#94A3B8] hover:text-[#F8FAFC] text-xs font-['JetBrains_Mono'] flex items-center space-x-1 transition-all cursor-pointer whitespace-nowrap"
-          title="Reset Global View to Continental Scale"
-        >
-          <RotateCcw className="w-3.5 h-3.5 shrink-0" />
-          <span className="hidden md:inline">RESET</span>
-        </button>
-
-        <button
-          onClick={onToggleTelemetry}
-          className={`h-8 px-2 sm:px-2.5 rounded-sm border text-xs font-['JetBrains_Mono'] flex items-center space-x-1.5 transition-all cursor-pointer whitespace-nowrap ${
-            isTelemetryOpen
-              ? 'bg-[#162032] border-[#06B6D4]/60 text-[#06B6D4]'
-              : 'bg-[#111827] border-[#1E293B] text-[#94A3B8] hover:text-[#F8FAFC]'
+        {/* View Switcher Pills */}
+        <div
+          className={`hidden sm:flex items-center ml-2 lg:ml-4 p-0.5 rounded-lg border ${
+            theme === 'light' ? 'bg-slate-100 border-slate-200' : 'bg-slate-900 border-slate-800'
           }`}
-          title={isTelemetryOpen ? 'Hide Right Telemetry Rail' : 'Show Right Telemetry Rail'}
         >
-          <PanelRight className="w-3.5 h-3.5 shrink-0" />
-          <span className="hidden sm:inline">TELEMETRY</span>
-        </button>
-
-        <button
-          onClick={handleExport}
-          className="h-8 px-2.5 sm:px-3 rounded-sm bg-[#F97316] hover:bg-[#FB923C] text-[#090D16] font-['JetBrains_Mono'] font-bold text-xs uppercase flex items-center space-x-1.5 shadow-sm transition-all cursor-pointer whitespace-nowrap"
-          title="Export Hotspots as Supabase / GIS compliant GeoJSON"
-        >
-          <Download className="w-3.5 h-3.5 text-[#090D16] shrink-0" />
-          <span className="hidden sm:inline">EXPORT GEOJSON</span>
-          <span className="sm:hidden">EXPORT</span>
-        </button>
+          <button
+            onClick={() => onSetViewMode('landing')}
+            className={`px-3 py-1 rounded-md text-xs font-mono font-medium transition-all cursor-pointer ${
+              viewMode === 'landing'
+                ? 'bg-cyan-500 text-black font-bold shadow-sm'
+                : theme === 'light'
+                ? 'text-slate-600 hover:text-slate-900'
+                : 'text-slate-400 hover:text-slate-200'
+            }`}
+          >
+            {t.navLandingPage}
+          </button>
+          <button
+            onClick={() => onSetViewMode('dashboard')}
+            className={`px-3 py-1 rounded-md text-xs font-mono font-medium transition-all cursor-pointer ${
+              viewMode === 'dashboard'
+                ? 'bg-cyan-500 text-black font-bold shadow-sm'
+                : theme === 'light'
+                ? 'text-slate-600 hover:text-slate-900'
+                : 'text-slate-400 hover:text-slate-200'
+            }`}
+          >
+            {t.navMissionControl}
+          </button>
+        </div>
       </div>
 
-      {/* Notification Toast */}
-      {copiedNotification && (
-        <div className="fixed top-16 right-4 z-50 bg-[#111827] border border-[#06B6D4] text-[#F8FAFC] px-3 py-2 rounded-sm shadow-xl flex items-center space-x-2 text-xs font-['JetBrains_Mono'] animate-fade-in">
-          <ShieldAlert className="w-4 h-4 text-[#06B6D4]" />
-          <span>GEOJSON TELEMETRY GENERATED & DOWNLOADED</span>
+      {/* Middle: Live System Indicator */}
+      <div className="hidden xl:flex items-center gap-2.5 text-xs font-mono flex-shrink-0">
+        <div
+          className={`flex items-center gap-2 px-3 py-1 rounded-full border whitespace-nowrap ${
+            theme === 'light'
+              ? 'bg-slate-100 border-slate-200 text-slate-700'
+              : 'bg-slate-900 border-slate-800 text-slate-300'
+          }`}
+        >
+          <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+          <span className="text-emerald-500 font-bold">{t.statusOnline}</span>
+          <span className="text-slate-400">|</span>
+          <span className={theme === 'light' ? 'text-slate-600' : 'text-slate-400'}>
+            {t.statusDataWindow}
+          </span>
         </div>
-      )}
+
+        <div
+          className={`flex items-center gap-1.5 px-3 py-1 rounded-full border whitespace-nowrap ${
+            theme === 'light'
+              ? 'bg-slate-100 border-slate-200 text-slate-600'
+              : 'bg-slate-900 border-slate-800 text-slate-400'
+          }`}
+        >
+          <Clock className="w-3.5 h-3.5 text-cyan-400" />
+          <span>{wibTime}</span>
+        </div>
+      </div>
+
+      {/* Right: Actions */}
+      <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
+        {/* Cara Kerja Button */}
+        <button
+          onClick={onOpenHowItWorks}
+          className={`hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-lg border text-xs font-mono font-medium transition-all cursor-pointer ${
+            theme === 'light'
+              ? 'border-cyan-300 bg-cyan-50 text-cyan-800 hover:bg-cyan-100'
+              : 'border-cyan-500/30 bg-cyan-950/30 text-cyan-300 hover:bg-cyan-900/40'
+          }`}
+          title={t.navHowItWorks}
+        >
+          <HelpCircle className="w-3.5 h-3.5 text-cyan-500" />
+          <span className="hidden md:inline">{t.navHowItWorks}</span>
+        </button>
+
+        {viewMode === 'dashboard' && (
+          <>
+            <button
+              onClick={handleExportCsv}
+              className="hidden md:flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-gradient-to-r from-emerald-600 to-teal-700 hover:from-emerald-500 hover:to-teal-600 text-white font-mono text-xs font-bold transition-all shadow-md shadow-emerald-900/30 cursor-pointer"
+              title={t.navExportCsv}
+            >
+              <FileSpreadsheet className="w-3.5 h-3.5" />
+              <span className="hidden lg:inline">{t.navExportCsv}</span>
+              <span className="text-[10px] opacity-80">({filteredClusters.length})</span>
+            </button>
+
+            <button
+              onClick={onResetView}
+              className={`p-1.5 rounded-lg border transition-colors cursor-pointer ${
+                theme === 'light'
+                  ? 'bg-slate-100 border-slate-200 text-slate-600 hover:text-cyan-600'
+                  : 'bg-slate-900 border-slate-800 text-slate-400 hover:text-cyan-400'
+              }`}
+              title={t.navResetMap}
+            >
+              <RotateCcw className="w-4 h-4" />
+            </button>
+
+            <button
+              onClick={onToggleAnalytics}
+              className={`hidden md:block p-1.5 rounded-lg border transition-colors cursor-pointer ${
+                isAnalyticsOpen
+                  ? theme === 'light'
+                    ? 'bg-cyan-100 border-cyan-400 text-cyan-800'
+                    : 'bg-cyan-950/60 border-cyan-500/50 text-cyan-400'
+                  : theme === 'light'
+                  ? 'bg-slate-100 border-slate-200 text-slate-600 hover:text-slate-900'
+                  : 'bg-slate-900 border-slate-800 text-slate-400 hover:text-slate-200'
+              }`}
+              title={t.navToggleAnalytics}
+            >
+              <PanelRight className="w-4 h-4" />
+            </button>
+          </>
+        )}
+
+        {/* Unified Settings Gear Button */}
+        <button
+          onClick={openSettings}
+          className={`p-1.5 rounded-lg border transition-colors cursor-pointer flex items-center gap-1.5 ${
+            theme === 'light'
+              ? 'bg-slate-100 border-slate-200 text-slate-600 hover:text-cyan-600 hover:border-cyan-400'
+              : 'bg-slate-900 border-slate-800 text-slate-400 hover:text-cyan-400 hover:border-cyan-400/50'
+          }`}
+          title={t.navSettings}
+        >
+          <Settings className="w-4 h-4" />
+        </button>
+
+        {viewMode === 'landing' && (
+          <button
+            onClick={() => onSetViewMode('dashboard')}
+            className="flex items-center gap-2 px-3 sm:px-4 py-1.5 rounded-lg bg-cyan-500 hover:bg-cyan-400 text-black font-semibold text-xs transition-all shadow-md shadow-cyan-500/20 cursor-pointer"
+          >
+            <span className="hidden sm:inline">{t.navLaunchDashboard}</span>
+            <span className="sm:hidden">{language === 'en' ? 'Launch' : 'Buka'}</span>
+            <LayoutDashboard className="w-3.5 h-3.5" />
+          </button>
+        )}
+      </div>
     </header>
   );
-};
+});

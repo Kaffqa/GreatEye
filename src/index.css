@@ -18,10 +18,121 @@
   --color-thermal-elevated: #FBBF24;
 }
 
+:root {
+  color-scheme: dark;
+  --bg-app: #070b14;
+  --bg-panel: rgba(13, 19, 31, 0.85);
+  --bg-card: rgba(17, 24, 39, 0.7);
+  --border-main: rgba(30, 41, 59, 0.8);
+  --text-primary: #f8fafc;
+  --text-secondary: #94a3b8;
+}
+
+:root.light {
+  color-scheme: light;
+  --bg-app: #f1f5f9;
+  --bg-panel: rgba(255, 255, 255, 0.95);
+  --bg-card: rgba(248, 250, 252, 0.9);
+  --border-main: rgba(203, 213, 225, 0.85);
+  --text-primary: #0f172a;
+  --text-secondary: #475569;
+}
+
 body {
   font-family: 'Geist', -apple-system, BlinkMacSystemFont, sans-serif;
-  background-color: #090D16;
-  color: #dfe2ef;
+  background-color: var(--bg-app);
+  color: var(--text-primary);
+  transition: background-color 0.25s ease, color 0.25s ease;
+}
+
+/* Light mode overrides for major container panels */
+.light body {
+  background-color: #f1f5f9;
+  color: #0f172a;
+}
+
+.light header {
+  background-color: #ffffff !important;
+  border-color: #e2e8f0 !important;
+  color: #0f172a !important;
+}
+
+.light header .bg-slate-900 {
+  background-color: #f1f5f9 !important;
+  border-color: #cbd5e1 !important;
+  color: #334155 !important;
+}
+
+.light aside {
+  background-color: rgba(255, 255, 255, 0.96) !important;
+  border-color: #e2e8f0 !important;
+  color: #0f172a !important;
+}
+
+.light aside .bg-slate-900,
+.light aside .bg-slate-950\/60,
+.light aside .bg-slate-900\/80 {
+  background-color: #f8fafc !important;
+  border-color: #e2e8f0 !important;
+  color: #1e293b !important;
+}
+
+.light aside label,
+.light aside span,
+.light aside h2,
+.light aside h3 {
+  color: #1e293b;
+}
+
+.light aside .text-slate-400,
+.light aside .text-slate-500 {
+  color: #64748b !important;
+}
+
+.light .bg-\[\#060a13\] {
+  background-color: #ffffff !important;
+}
+
+.light .bg-\[\#070b14\] {
+  background-color: #f8fafc !important;
+}
+
+.light .bg-\[\#090e1c\] {
+  background-color: #ffffff !important;
+}
+
+.light .border-slate-800,
+.light .border-slate-800\/90,
+.light .border-slate-800\/80,
+.light .border-slate-800\/60 {
+  border-color: #e2e8f0 !important;
+}
+
+/* Light mode calendar picker styling */
+.light input[type="date"] {
+  color-scheme: light;
+}
+
+.light input[type="date"]::-webkit-calendar-picker-indicator {
+  filter: none;
+  cursor: pointer;
+  opacity: 0.7;
+}
+
+/* Dark theme native calendar picker styling */
+input[type="date"] {
+  color-scheme: dark;
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+  filter: invert(0.8) sepia(100%) saturate(300%) hue-rotate(145deg);
+  cursor: pointer;
+  opacity: 0.8;
+  transition: opacity 0.2s ease;
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator:hover {
+  opacity: 1;
 }
 
 /* Custom scrollbars for dense telemetry feeds */
@@ -30,20 +141,36 @@ body {
   height: 5px;
 }
 ::-webkit-scrollbar-track {
-  background: #090D16;
+  background: var(--bg-app);
 }
 ::-webkit-scrollbar-thumb {
-  background: #1E293B;
+  background: #334155;
   border-radius: 2px;
 }
+.light ::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+}
 ::-webkit-scrollbar-thumb:hover {
-  background: #334155;
+  background: #475569;
 }
 
-/* Leaflet dark styling */
+/* Leaflet styling & complete elimination of stray popup panes */
 .leaflet-container {
   background: #090D16 !important;
   font-family: 'Geist', sans-serif !important;
+}
+
+.light .leaflet-container {
+  background: #f8fafc !important;
+}
+
+/* Ensure no Leaflet popup pane or ghost popups ever render or glitch */
+.leaflet-popup-pane,
+.leaflet-popup {
+  display: none !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
 }
 
 .leaflet-bar {
@@ -53,15 +180,31 @@ body {
   overflow: hidden;
 }
 
+.light .leaflet-bar {
+  border: 1px solid #cbd5e1 !important;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1) !important;
+}
+
 .leaflet-bar a {
   background-color: #111827 !important;
   color: #94A3B8 !important;
   border-bottom: 1px solid #1E293B !important;
 }
 
+.light .leaflet-bar a {
+  background-color: #ffffff !important;
+  color: #475569 !important;
+  border-bottom: 1px solid #e2e8f0 !important;
+}
+
 .leaflet-bar a:hover {
   background-color: #1C2436 !important;
   color: #06B6D4 !important;
+}
+
+.light .leaflet-bar a:hover {
+  background-color: #f1f5f9 !important;
+  color: #0891b2 !important;
 }
 
 .leaflet-control-attribution {
@@ -74,36 +217,18 @@ body {
   backdrop-filter: blur(4px);
 }
 
+.light .leaflet-control-attribution {
+  background: rgba(255, 255, 255, 0.85) !important;
+  color: #64748b !important;
+  border: 1px solid #cbd5e1 !important;
+}
+
 .leaflet-control-attribution a {
   color: #94A3B8 !important;
 }
 
-.leaflet-popup-content-wrapper {
-  background: #111827 !important;
-  color: #DFE2EF !important;
-  border: 1px solid #334155 !important;
-  border-radius: 4px !important;
-  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(6, 182, 212, 0.2) !important;
-  padding: 0 !important;
-}
-
-.leaflet-popup-tip {
-  background: #111827 !important;
-  border: 1px solid #334155 !important;
-}
-
-.leaflet-popup-content {
-  margin: 0 !important;
-  line-height: 1.4 !important;
-}
-
-.leaflet-popup-close-button {
-  color: #94A3B8 !important;
-  padding: 6px !important;
-}
-
-.leaflet-popup-close-button:hover {
-  color: #F8FAFC !important;
+.light .leaflet-control-attribution a {
+  color: #0284c7 !important;
 }
 
 /* Radar & Thermal Pulse Animations */
@@ -126,6 +251,33 @@ body {
   animation: thermal-ping 2.2s cubic-bezier(0, 0, 0.2, 1) infinite;
 }
 
+/* Epicenter Ripple Wave Animation */
+@keyframes ripple-expand {
+  0% {
+    transform: scale(0.2);
+    opacity: 0.9;
+  }
+  60% {
+    opacity: 0.6;
+  }
+  100% {
+    transform: scale(3.5);
+    opacity: 0;
+  }
+}
+
+.animate-ripple-ring-1 {
+  animation: ripple-expand 2.4s cubic-bezier(0.1, 0.8, 0.3, 1) infinite;
+}
+
+.animate-ripple-ring-2 {
+  animation: ripple-expand 2.4s cubic-bezier(0.1, 0.8, 0.3, 1) 0.6s infinite;
+}
+
+.animate-ripple-ring-3 {
+  animation: ripple-expand 2.4s cubic-bezier(0.1, 0.8, 0.3, 1) 1.2s infinite;
+}
+
 @keyframes scanline {
   0% { transform: translateY(-100%); }
   100% { transform: translateY(1000%); }
@@ -140,4 +292,18 @@ body {
   background: linear-gradient(90deg, transparent, rgba(6, 182, 212, 0.4), transparent);
   pointer-events: none;
   animation: scanline 8s linear infinite;
+}
+
+/* Custom Utility: Hide scrollbar for Chrome, Safari, and Firefox */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+html, body {
+  overflow-x: hidden;
+  max-width: 100vw;
 }
