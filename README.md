@@ -1,5 +1,11 @@
 <div align="center">
 
+<a href="https://firms.modaps.eosdis.nasa.gov/" target="_blank" rel="noopener noreferrer">
+  <img src="./public/nasa-logo.svg" alt="NASA Logo" width="130" />
+</a>
+
+<br />
+
 # 🛰️ GREATEYE — Earth Observation & Mission Control
 ### Indonesia Wildfire Spatiotemporal Observation & Multi-Sensor Harmonized Intelligence (2023 – July 2026)
 
@@ -294,6 +300,12 @@ GreatEye/
 ---
 
 ## 📑 Data Attribution & Scientific Citations
+
+<div align="center">
+  <a href="https://firms.modaps.eosdis.nasa.gov/" target="_blank" rel="noopener noreferrer">
+    <img src="./public/nasa-logo.svg" alt="NASA Logo" width="80" />
+  </a>
+</div>
 
 Active fire satellite observation data provided courtesy of:
 - **NASA Land, Atmosphere Near real-time Capability for EOS (LANCE) / Fire Information for Resource Management System (FIRMS)**.
